@@ -44,7 +44,7 @@ const bcrypt = require ('bcryptjs');
   //   });
 
    // Register
-    app.post('/users', async (req, res) => {
+    app.post('/registertest', async (req, res) => {
       try{
         const {username, password, first_name, last_name, work_email} = req.body;
         const user = req.body;
