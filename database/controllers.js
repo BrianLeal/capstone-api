@@ -8,19 +8,38 @@ const knex = require("./dbConnection");
 //         })
 // }
 
-    // users
-    function getAllUsers () {
-        return knex.select('*').from('users');
-    }
+//CREATE
+
+function addTask(u_id, newTask) {
+  // console.log('addTask log', task)
+  return knex('tasks').insert({user_id: u_id, task: newTask })
+}
+
+//READ
+function getSpecificItem(table, i_id) {
+  return knex.select('*').from(table).where({id: i_id})
+}
+
+//LIST
+
+function getAll(input) {
+  return knex.select("*").from(input)
+}
+
+  //DELETE
+  
+  function deleteItem(table, i_id) {
+    return knex(table).where({id: i_id}).del()
+}
 
     function addUser (body) {
         return knex.insert(body).from('users');
       }
 
 
-      function removeUser (param) {
-        return knex.select('*').from('users').where({ id: param }).del();
-    }
+    //   function removeUser (param) {
+    //     return knex.select('*').from('users').where({ id: param }).del();
+    // }
 
     
     function updateUser (param, body) {
@@ -30,21 +49,14 @@ const knex = require("./dbConnection");
 
     // tasks
 
-    function getAllTasks () {
-        return knex.select('*').from('tasks');
-    }
-
-    function removeTask (param) {
-        return knex.select('*').from('tasks').where({ id: param }).del();
-      }
+    // function removeTask (param) {
+    //     return knex.select('*').from('tasks').where({ id: param }).del();
+    //   }
 
       function getTaskById (param) {
     return knex.select('*').from('tasks').where({ id: param });
     }
 
-    function postTask (body) {
-        return knex.insert(body).from('tasks');
-    }
 
     function updateTask (param, body) {
         return knex.select('*').from('tasks').where({ id: param })
@@ -53,9 +65,9 @@ const knex = require("./dbConnection");
 
 
     // user accounts
-function createUser (privilege_level, username, hashed_password) {
-    return knex('users').insert({ privilege_level, username, hashed_password });
-  }
+// function createUser (privilege_level, username, hashed_password) {
+//     return knex('users').insert({ privilege_level, username, hashed_password });
+//   }
 
   function getPasswordHash (userName) {
     return knex('users')
@@ -72,8 +84,8 @@ function createUser (privilege_level, username, hashed_password) {
       .catch((err) => console.log(err))
   }
 
-
-module.exports = {getPasswordHash}
+//getPasswordHash, getAll, getAllTasks, getPrivId, createUser, updateTask, postTask, getTaskById, removeTask, getAllTasks, updateUser, removeUser, addUser
+module.exports = { getPasswordHash, getAll, getSpecificItem, addTask, deleteItem, updateTask };
 
 
 
