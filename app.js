@@ -19,8 +19,7 @@ app.use(express.json());
 app.use(cors());
 
 //HASHING
-const { hash, compare } = require("bcrypt");
-const saltRounds = 12;
+const bcrypt = require ('bcryptjs');
 
 
   //CREATE (POST)
@@ -44,12 +43,12 @@ const saltRounds = 12;
   //       }
   //   });
 
-    //Register
+   // Register
     app.post('/users', async (req, res) => {
       try{
         const {username, password, first_name, last_name, work_email} = req.body;
         const user = req.body;
-        const hashed_password = await hash(password, 12);
+        const hashed_password = await bcrypt.hash(password, 12);
         await dbConnection.insert({username: username, hashed_password: hashed_password, first_name: first_name, last_name: last_name, work_email: work_email}).from('users');
         res.status(201).json({
           user: username,
@@ -60,6 +59,12 @@ const saltRounds = 12;
         res.status(500).send('Something Went Wrong');
       }
     });
+
+
+
+
+  
+      
   
 
 
@@ -71,7 +76,7 @@ const saltRounds = 12;
         user = await dbConnection.select('*').where({username: username}).from('users')
         if (user.length){
           console.log(user)
-          const validPass = compare(password, user[0].password_hash);
+          const validPass = await bcrypt.compare(password, user[0].password_hash);
           if(validPass) {
             res.status(201).json({
               user: username,

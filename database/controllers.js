@@ -69,6 +69,11 @@ function getAll(input) {
 //     return knex('users').insert({ privilege_level, username, hashed_password });
 //   }
 
+// function createUser(username, passwordHash, first_name, last_name){
+//   return knex('users').insert({username, passwordHash, first_name, last_name})
+// }
+
+
   function getPasswordHash (userName) {
     return knex('users')
       .where({ username: userName })
