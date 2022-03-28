@@ -1,6 +1,7 @@
 const dbConnection = require('./database/dbConnection');
 const generateToken = require('./util/generateToken')
-
+//NEED TO ADD RANK TO USERS
+//NEED TO ADD DUE DATE AND COMPLETION STATUS TO THE TASKS
 const knex = require("knex");
 const express = require("express");
 const morgan = require("morgan");
@@ -46,12 +47,13 @@ const bcrypt = require ('bcryptjs');
    // Register
     app.post('/registertest', async (req, res) => {
       try{
-        const {username, password, first_name, last_name, work_email} = req.body;
+        const {username, password, first_name, last_name, work_email, role} = req.body;
         const user = req.body;
         const hashed_password = await bcrypt.hash(password, 12);
-        await dbConnection.insert({username: username, hashed_password: hashed_password, first_name: first_name, last_name: last_name, work_email: work_email}).from('users');
+        await dbConnection.insert({username: username, hashed_password: hashed_password, first_name: first_name, last_name: last_name, work_email: work_email, role: role}).from('users');
         res.status(201).json({
           user: username,
+          role:role,
           token:generateToken(username)
          });
       } catch(e) {

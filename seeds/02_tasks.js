@@ -9,14 +9,20 @@ exports.seed = async function(knex) {
     {
       user_id: 1,
       task: 'PCS here',  
+      task_status: false,
+      due_date: '7/31/2022',
     },
     {
       user_id: 2,
       task: 'find info on new inbound',  
+      task_status: true,
+      due_date: '7/14/2022',
     },
     {
       user_id: 3,
       task: 'assign sponsors',  
+      task_status:false,
+      due_date: '6/5/2022',
     },
   ])
 };

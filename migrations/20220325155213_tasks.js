@@ -7,6 +7,8 @@ exports.up = function(knex) {
         table.increments("id").primary();
         table.integer("user_id").references("id").inTable("users").onDelete('cascade');
         table.string("task");
+        table.boolean("task_status");
+        table.string("due_date");
         table.timestamps(true, true);
     })
 };
