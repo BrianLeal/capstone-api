@@ -51,7 +51,6 @@ const bcrypt = require ('bcryptjs');
       const hashed_password = await bcrypt.hash(password, 12);
       await dbConnection.insert({ work_email: work_email, hashed_password: hashed_password, rank: rank, first_name: first_name, last_name: last_name,  role: role}).from('users');
       res.status(201).json({
-        work_email: work_email,
         role:role,
         token:generateToken(work_email)
        });
