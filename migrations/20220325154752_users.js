@@ -8,10 +8,9 @@ exports.up = function(knex) {
         table.string("rank");
         table.string("first_name");
         table.string("last_name");
-        table.string("work_email");
+        table.string("work_email").unique().notNullable();
         table.string("personal_email");
         table.string("phone_number"); 
-        table.string("username").unique().notNullable();
         table.string("hashed_password").notNullable();
         table.string("role");
         table.integer("sponsor_id");

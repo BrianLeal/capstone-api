@@ -45,60 +45,89 @@ const bcrypt = require ('bcryptjs');
   //   });
 
    // Register
-    app.post('/registertest', async (req, res) => {
-      try{
-        const {username, password, first_name, last_name, work_email, role} = req.body;
-        const user = req.body;
-        const hashed_password = await bcrypt.hash(password, 12);
-        await dbConnection.insert({username: username, hashed_password: hashed_password, first_name: first_name, last_name: last_name, work_email: work_email, role: role}).from('users');
-        res.status(201).json({
-          user: username,
-          role:role,
-          token:generateToken(username)
-         });
-      } catch(e) {
-        console.log(e)
-        res.status(500).send('Something Went Wrong');
+   app.post('/register', async (req, res) => {
+    try{
+      const { work_email, password, rank, first_name, last_name, role,} = req.body;
+      const hashed_password = await bcrypt.hash(password, 12);
+      await dbConnection.insert({ work_email: work_email, hashed_password: hashed_password, rank: rank, first_name: first_name, last_name: last_name,  role: role}).from('users');
+      res.status(201).json({
+        work_email: work_email,
+        role:role,
+        token:generateToken(work_email)
+       });
+    } catch(e) {
+      console.log(e)
+      res.status(500).send('Something Went Wrong');
+    }
+  });
+
+
+  // login
+  app.post('/users/login', async(req, res) => {
+
+    try{
+      const {work_email, password} = req.body;
+      user = await dbConnection.select('*').where({work_email: work_email}).from('users')
+      if (user.length){
+        console.log(user)
+        const validPass = await bcrypt.compare(password, user[0].hashed_password);
+        if(validPass) {
+          res.status(201).json({
+            role: user[0].role,
+            sponsorID: user[0].sponsor_id,
+            token:generateToken(work_email)
+           });
+        }
+        else{
+          res.json('Wrong Password')
+        }
+      }
+      else {
+        res.status(404).json('User not found')
+      }
+      }
+
+      catch(e) {
+      console.log(e)
+      res.status(500).send('Something Went Wrong');
       }
     });
 
 
+//Login
+  // app.post("/users/login", (req, res) => {
+  //   let { username, password } = req.body;
+
+  //   if (!username) res.status(401).send("username required for login");
+  //   else if (!password) res.status(401).send("password require for login");
+  //   else {
+  //     getPasswordHash(username)
+  //       .then((hashedPassword) => {
+  //         compare(password, hashedPassword)
+  //           .then((isMatch) => {
+  //             if (isMatch)  res.status(201).send({
+  //               user:username,
+  //               role:role,
+  //               token:generateToken(username)
+  //              });
+  //             else
+  //               res.status(401).json("incorrect username or password supplied");
+  //           })
+  //           .catch((err) => {
+  //             res.status(500).json(err);
+  //           });
+  //       })
+  //       .catch((err) => {
+  //         res.status(500).json(err);
+  //       });
+  //   }
+  // });
+
+
 
 
   
-      
-  
-
-
-    // login
-    app.post('/users/login', async(req, res) => {
-
-      try{
-        const {username, password} = req.body;
-        user = await dbConnection.select('*').where({username: username}).from('users')
-        if (user.length){
-          console.log(user)
-          const validPass = await bcrypt.compare(password, user[0].password_hash);
-          if(validPass) {
-            res.status(201).json({
-              user: username,
-              token:generateToken(username)
-             });
-          }
-          else{
-            res.json('Wrong Password')
-          }
-        }
-        else {
-          res.status(404).json('User not found')
-        }
-        }
-  
-        catch(e) {
-        console.log(e)
-        res.status(500).send('Something Went Wrong');
-        }
-      });
+   
     
   
 

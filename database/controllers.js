@@ -81,6 +81,11 @@ function getAll(input) {
       .then((data) => data[0].hashed_password);
   }
 
+  // function getPasswordHash(username){
+  //   return ( knex('users').where({username}).select('passwordHash')
+  //   .then(data=>data[0].passwordHash)
+  //   )}
+
   function getPrivId (userName) {
     return knex('users')
       .where({ username: userName })
