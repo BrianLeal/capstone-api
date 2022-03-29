@@ -51,6 +51,7 @@ const bcrypt = require ('bcryptjs');
       const hashed_password = await bcrypt.hash(password, 12);
       await dbConnection.insert({ work_email: work_email, hashed_password: hashed_password, rank: rank, first_name: first_name, last_name: last_name,  role: role}).from('users');
       res.status(201).json({
+        work_email: work_email,
         role:role,
         token:generateToken(work_email)
        });
@@ -72,6 +73,10 @@ const bcrypt = require ('bcryptjs');
         const validPass = await bcrypt.compare(password, user[0].hashed_password);
         if(validPass) {
           res.status(201).json({
+            id: user[0].id,
+            rank: user[0].rank,
+            lastName: user[0].last_name,
+            workEmail: user[0].work_email,
             role: user[0].role,
             sponsorID: user[0].sponsor_id,
             token:generateToken(work_email)
@@ -92,44 +97,6 @@ const bcrypt = require ('bcryptjs');
       }
     });
 
-
-//Login
-  // app.post("/users/login", (req, res) => {
-  //   let { username, password } = req.body;
-
-  //   if (!username) res.status(401).send("username required for login");
-  //   else if (!password) res.status(401).send("password require for login");
-  //   else {
-  //     getPasswordHash(username)
-  //       .then((hashedPassword) => {
-  //         compare(password, hashedPassword)
-  //           .then((isMatch) => {
-  //             if (isMatch)  res.status(201).send({
-  //               user:username,
-  //               role:role,
-  //               token:generateToken(username)
-  //              });
-  //             else
-  //               res.status(401).json("incorrect username or password supplied");
-  //           })
-  //           .catch((err) => {
-  //             res.status(500).json(err);
-  //           });
-  //       })
-  //       .catch((err) => {
-  //         res.status(500).json(err);
-  //       });
-  //   }
-  // });
-
-
-
-
-  
-   
-    
-  
-
     app.post("/tasks", (req, res) => {
       const u_id = req.body.user_id ? req.body.user_id : '';
       const newTask = req.body.task ? req.body.task : '';
@@ -145,17 +112,63 @@ const bcrypt = require ('bcryptjs');
           )
   })
 
+  //getting all tasks for an inbound user
+  app.get('/tasks/user/:id', function(req, res){
+    dbConnection
+    .select('*')
+    .from('tasks')
+    .where({id: req.params.id})
+    .then(data => res.status(200).json(data))
+    .catch(err =>
+      res.status(404).json({
+          message:
+            'The data you are looking for could not be found. Please try again'
+      }))
+});
+
+//getting the sponsor info for user
+app.get('/sponsor/:id', function(req, res){
+  dbConnection
+  .select('*')
+  .where({id: req.params.id})
+  .from('users')
+  .then(data => res.status(200).json(data))
+  .catch(err =>
+    res.status(404).json({
+        message:
+          'The data you are looking for could not be found. Please try again'
+    }))
+});
+
+//getting all inbounds for one sponsor
+app.get('/sponsor/user/:id', function(req, res){
+  dbConnection
+  .select('*')
+  .where({sponsor_id: req.params.id})
+  .from('users')
+  .then(data => res.status(200).json(data))
+  .catch(err =>
+    res.status(404).json({
+        message:
+          'The data you are looking for could not be found. Please try again'
+    }))
+});
+
+
+
+
+
   // READ (GET)
 
   //Get by specific ID g2g
 
-  app.get("/:table/:id", (req, res) => {
-    getSpecificItem(req.params.table, req.params.id)
-        .then((data) => res.send(data))
-        .catch((err) => 
-            res.status(404).json({message: `${req.params.table} does not exist.`})
-        )
-})
+//   app.get("/:table/:id", (req, res) => {
+//     getSpecificItem(req.params.table, req.params.id)
+//         .then((data) => res.send(data))
+//         .catch((err) => 
+//             res.status(404).json({message: `${req.params.table} does not exist.`})
+//         )
+// })
 
   // //getting specific user by ID
   // app.get('/posts/users/:user_id', function(req, res) {

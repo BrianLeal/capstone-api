@@ -18,7 +18,7 @@ exports.seed = async function(knex) {
       role: 'inbound',
       sponsor_id: 2,
      },
-     // test pw
+
      {
       rank: 'Sgt',
       first_name: "Jim", 
@@ -30,6 +30,33 @@ exports.seed = async function(knex) {
       role: 'sponsor',
       sponsor_id: 0,
      },
+
+     {
+      // test pw
+      rank: 'spc4',
+      first_name: "Smarty", 
+      last_name: "McGuy",
+      work_email: 'smarty@yahoo.com',
+      personal_email: 'mcguy@me.com',
+      phone_number: '315-442-2830', 
+      hashed_password: "$2a$12$44qBZpZCQB/zxO34kGPV4uCp53eOoiCd9hBrkCa3E9LjclLLnb272",
+      role: 'inbound',
+      sponsor_id: 2,
+     },
+
+     {
+      // test pw
+      rank: 'spc4',
+      first_name: "Hearty", 
+      last_name: "McHi",
+      work_email: 'hearty@yahoo.com',
+      personal_email: 'mchi@me.com',
+      phone_number: '315-440-2833', 
+      hashed_password: "$2a$12$44qBZpZCQB/zxO34kGPV4uCp53eOoiCd9hBrkCa3E9LjclLLnb272",
+      role: 'inbound',
+      sponsor_id: 2,
+     },
+     // test pw
      //test pw
      {
       rank: 'Colonel',
