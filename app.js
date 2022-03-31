@@ -64,7 +64,7 @@ const bcrypt = require ('bcryptjs');
            });
         }
         else{
-          res.json('Wrong Password')
+          res.status(404).res.json('Wrong Password')
         }
       }
       else {
@@ -171,6 +171,19 @@ app.post('/sponsor/addtask', function(req, res){
           res.status(404).json({ message: "Something is wrong."})
       })
     });
+
+    //getting the sponsor for a selected user in ViewChecklist
+    app.get('/users/sponsor/:id', function(req, res){
+      dbConnection
+      .select('*')
+      .where({id: req.params.id})
+      .from('users')
+      .then(data => res.status(200).json(data))
+      .catch((err) => {
+            // console.error(err);
+            res.status(404).json({ message: "Something is wrong."})
+        })
+      });
 
 
 
