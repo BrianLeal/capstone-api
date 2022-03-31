@@ -11,7 +11,7 @@ exports.seed = async function(knex) {
       rank: 'Spc3',
       first_name: "Matt", 
       last_name: "Smith",
-      work_email: 'matt.smith.31@spaceforce.mil',
+      work_email: 'matt.smith@spaceforce.mil',
       personal_email: 'hello@me.com',
       phone_number: '315-444-2830', 
       hashed_password: "$2a$12$44qBZpZCQB/zxO34kGPV4uCp53eOoiCd9hBrkCa3E9LjclLLnb272",
@@ -46,7 +46,7 @@ exports.seed = async function(knex) {
 
      {
       // test pw
-      rank: 'Spc4',
+      rank: 'Spc3',
       first_name: "Emily", 
       last_name: "Nguyen",
       work_email: 'emily.nguyen@spaceforce.mil',
@@ -54,7 +54,7 @@ exports.seed = async function(knex) {
       phone_number: '315-440-2833', 
       hashed_password: "$2a$12$44qBZpZCQB/zxO34kGPV4uCp53eOoiCd9hBrkCa3E9LjclLLnb272",
       role: 'inbound',
-      sponsor_id: 2,
+      sponsor_id: 7,
      },
      // test pw
      //test pw
