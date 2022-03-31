@@ -24,25 +24,6 @@ const bcrypt = require ('bcryptjs');
 
 
   //CREATE (POST)
-  // app.post("/users", function(req, res) {
-
-  //   let {first_name, last_name, work_email, personal_email,
-  //        phone_number, username, password, privilege_level, sponsor_id
-  //       } = req.body;
-    
-  //   if(!first_name) res.status(401).send('first name required for signup')
-  //   if(!last_name) res.status(401).send('last name required for signup')
-  //   if(!username) res.status(401).send('username required for signup')
-  //   if(!password) res.status(401).send('password required for signup')
- 
-  //     else {
-  //       hash(password, saltRounds).then(hashedPassword=>{
-  //         addUser(first_name, last_name, username, hashedPassword)
-  //         .then(data=> res.status(201).json("USER CREATED SUCCESFULLY"))
-  //         .catch(err => rescape.status(500).json(err));
-  //         });
-  //       }
-  //   });
 
    // Register
    app.post('/register', async (req, res) => {
@@ -117,7 +98,7 @@ const bcrypt = require ('bcryptjs');
     dbConnection
     .select('*')
     .from('tasks')
-    .where({id: req.params.id})
+    .where({user_id: req.params.id})
     .then(data => res.status(200).json(data))
     .catch(err =>
       res.status(404).json({
@@ -154,6 +135,42 @@ app.get('/sponsor/user/:id', function(req, res){
     }))
 });
 
+//adding a new task to an inbound as a sponsor
+app.post('/sponsor/addtask', function(req, res){
+  dbConnection
+  .insert({ user_id: req.body.user_id, task: req.body.task, due_date: req.body.due_date, task_status: req.body.task_status }).from('tasks')
+      .then((data) => res.status(201).json(data))
+      .catch((err) => {
+        // console.error(err);
+        res.status(404).json({ message: "Something is wrong."})
+    })
+  });
+
+  //adding/changing an inbound's sponsor id
+  app.patch('/admin/sponsorid', function(req, res){
+    dbConnection
+    .update({sponsor_id: req.body.sponsor_id})
+    .where({id: req.body.id})
+    .from('users')
+    .then((data) => res.status(201).json(data))
+    .catch((err) => {
+          // console.error(err);
+          res.status(404).json({ message: "Something is wrong."})
+      })
+    });
+
+
+  app.get('/admin/getsponsors', function(req, res){
+    dbConnection
+    .select('*')
+    .where({role: 'sponsor'})
+    .from('users')
+    .then(data => res.status(200).json(data))
+    .catch((err) => {
+          // console.error(err);
+          res.status(404).json({ message: "Something is wrong."})
+      })
+    });
 
 
 
